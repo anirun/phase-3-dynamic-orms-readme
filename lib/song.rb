@@ -22,7 +22,7 @@ class Song
   end
 
   self.column_names.each do |col_name|
-    attr_accessor col_name.to_sym
+    attr_accessor col_name.to_sym # prepends col name with : so it can be used as accessor
   end
 
   def initialize(options={})
@@ -48,7 +48,7 @@ class Song
     end
     values.join(", ")
   end
-
+  # grabbing column names to create Ruby object - SQL maintains the id
   def col_names_for_insert
     self.class.column_names.delete_if {|col| col == "id"}.join(", ")
   end
@@ -56,6 +56,7 @@ class Song
   def self.find_by_name(name)
     sql = "SELECT * FROM #{self.table_name} WHERE name = '#{name}'"
     DB[:conn].execute(sql)
+    self
   end
 
 end
